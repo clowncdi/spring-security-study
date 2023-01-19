@@ -1,6 +1,14 @@
 server:
   port: 8080
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+    thymeleaf:
+      cache: false
 
 logging:
   level:
     root: info
+#    org.springframework.security: debug
