@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Example</title>
+</head>
+<body>
+<div class="container">
+	<h1>Welcome Spring Security Example</h1>
+	<p>당신의 이름은 <span th:text="${name}">차현우</span> 입니다.</p>
+	<p>당신의 나이는 <span th:text="${age}">0</span>살 입니다.</p>
+	<p>변수는 <span th:with="temp=${name}" th:text="${temp}"></span>입니다.</p>
+	<th:block th:if="${age < 30}"><p>당신은 30대가 아닙니다.</p></th:block>
+	<th:block th:unless="${age < 30}"><p>당신은 30대 이상입니다.</p></th:block>
+	<th:block th:switch="${name}">
+		<p th:case="정우성"> 당신은 정씨 입니다.</p>
+		<p th:case="감우성"> 당신은 감씨 입니다.</p>
+	</th:block>
+	<a href="/">홈으로</a>
+</div>
+</body>
+</html>

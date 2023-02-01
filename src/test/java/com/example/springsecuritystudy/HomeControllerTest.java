@@ -31,6 +31,13 @@ class HomeControllerTest {
 	}
 
 	@Test
+	void example() throws Exception {
+		mvc.perform(
+				get("/example")
+		).andExpect(status().isOk());
+	}
+
+	@Test
 	void login_user() throws Exception {
 		mvc.perform(
 				formLogin("/login")
