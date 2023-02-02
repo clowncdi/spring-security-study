@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy;
+package com.example.springsecuritystudy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

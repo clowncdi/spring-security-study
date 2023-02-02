@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html
+		lang="ko"
+		xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/signin.css">
+	<head th:insert="fragments.html::header"></head>
+</head>
+<body>
+<header th:insert="fragments.html::nav"></header>
+<div class="container">
+	<form class="form-signin" method="post" th:action="@{/signup}">
+		<h2 class="form-signin-heading">회원가입</h2>
+		<p>
+			<lable for="username" class="sr-only">Username</lable>
+			<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+		</p>
+		<p>
+			<lable for="password" class="sr-only">Password</lable>
+			<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+		</p>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">회원가입</button>
+	</form>
+</div>
+</body>
+</html>

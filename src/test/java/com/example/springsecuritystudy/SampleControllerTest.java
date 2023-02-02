@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-class HomeControllerTest {
+class SampleControllerTest {
 
 	@Autowired
 	private WebApplicationContext applicationContext;

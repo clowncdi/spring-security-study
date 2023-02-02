@@ -1,14 +1,14 @@
 server:
   port: 8080
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: true
-    thymeleaf:
-      cache: false
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 
 logging:
   level:
     root: info
-#    org.springframework.security: debug
+    org.springframework.web: debug
+    sql: error
+    org.springframework.security: debug
