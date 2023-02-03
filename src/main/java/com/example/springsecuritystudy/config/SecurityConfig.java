@@ -1,14 +1,12 @@
 package com.example.springsecuritystudy.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -20,28 +18,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests(auth -> auth
-					.antMatchers("/", "/home", "/signup", "/example").permitAll()
-					.antMatchers("/post").hasRole("USER")
-					.antMatchers("/admin").hasRole("ADMIN")
-					.anyRequest().authenticated()
+						.antMatchers("/", "/home", "/signup", "/example",
+								"/css/**", "/js/**", "/h2-console/**").permitAll()
+						.antMatchers("/post").hasRole("USER")
+						.antMatchers("/admin").hasRole("ADMIN")
+						.antMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
+						.antMatchers(HttpMethod.DELETE, "/notice").hasRole("ADMIN")
+						.anyRequest().authenticated()
 				)
 				.formLogin(form -> form
-					.loginPage("/login")
-					.defaultSuccessUrl("/")
-					.permitAll()
+						.loginPage("/login")
+						.defaultSuccessUrl("/")
+						.permitAll()
 				)
 				.logout(logout -> logout
-					.deleteCookies("remove")
-					.invalidateHttpSession(false)
-					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-					.logoutSuccessUrl("/")
+						// .logoutUrl("/logout") // post 방식으로만 동작
+						.logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // get 방식으로도 동작
+						.logoutSuccessUrl("/")
+						.deleteCookies("JSESSIONID")
+						.invalidateHttpSession(true)
 				);
 
 		return http.build();
@@ -53,19 +54,8 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public UserDetailsService users() {
-		UserDetails user = User.withUsername("user")
-				.password(passwordEncoder.encode("user"))
-				.roles("USER")
-				.build();
-		UserDetails admin = User.withUsername("admin")
-				.password(passwordEncoder.encode("admin"))
-				.roles("ADMIN")
-				.build();
-		UserDetails tester = User.withUsername("test")
-				.password(passwordEncoder.encode("test"))
-				.roles("ADMIN", "USER")
-				.build();
-		return new InMemoryUserDetailsManager(user, admin, tester);
+	public UserDetailsService userDetailsService() {
+		return username -> userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("유저를 찾지 못 했습니다."));
 	}
 }

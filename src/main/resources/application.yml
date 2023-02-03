@@ -1,14 +1,9 @@
 server:
   port: 8080
 
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
-
 logging:
   level:
     root: info
     org.springframework.web: debug
     sql: error
-    org.springframework.security: debug
+#    org.springframework.security: debug
