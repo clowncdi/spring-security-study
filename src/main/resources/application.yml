@@ -1,5 +1,8 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 10m # 기본 30분, 최소는 1분
 
 logging:
   level:
