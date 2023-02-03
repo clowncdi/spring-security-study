@@ -59,7 +59,7 @@ class SampleControllerTest {
 	@WithMockUser
 	void access_user() throws Exception {
 		mvc.perform(
-				get("/user")
+				get("/post")
 		).andExpect(status().isOk());
 	}
 
