@@ -68,7 +68,9 @@ class NoteControllerTest extends TestConfig {
 	void getNote_인증있음() throws Exception {
 		mvc.perform(
 				get("/note")
-		).andExpect(status().isOk());
+		).andExpect(status().isOk())
+				.andExpect(view().name("note/index"))
+				.andDo(print());
 	}
 
 	@Test
