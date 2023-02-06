@@ -3,6 +3,7 @@ package com.example.springsecuritystudy.notice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -10,7 +11,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.springsecuritystudy.helper.TestConfig;
 import com.example.springsecuritystudy.helper.WithMockAdmin;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
@@ -22,8 +22,6 @@ class NoticeControllerTest extends TestConfig {
 
 	@Autowired
 	private NoticeRepository noticeRepository;
-	@Autowired
-	private ObjectMapper objectMapper;
 	private MockMvc mvc;
 
 	@BeforeEach
@@ -49,30 +47,33 @@ class NoticeControllerTest extends TestConfig {
 
 	@Test
 	void postNotice_인증없음() throws Exception {
-		String content = objectMapper.writeValueAsString(new Notice("제목", "내용"));
 		mvc.perform(post("/notice")
-						.content(content))
-				.andExpect(status().is4xxClientError());
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("title", "제목")
+						.param("content", "내용")
+				).andExpect(status().is4xxClientError());
 	}
 
 	@Test
 	@WithMockUser(roles = "USER", username = "user", password = "user")
 	void postNotice_유저인증있음() throws Exception {
-		String content = objectMapper.writeValueAsString(new Notice("제목", "내용"));
 		mvc.perform(post("/notice")
 						.with(csrf())
-						.content(content))
-				.andExpect(status().is4xxClientError());
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("title", "제목")
+						.param("content", "내용")
+			).andExpect(status().is4xxClientError());
 	}
 
 	@Test
 	@WithMockAdmin
 	void postNotice_어드민인증있음() throws Exception {
-		String content = objectMapper.writeValueAsString(new Notice("제목", "내용"));
 		mvc.perform(post("/notice")
 						.with(csrf())
-						.content(content))
-				.andExpect(redirectedUrl("notice"))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("title", "제목")
+						.param("content", "내용")
+				).andExpect(redirectedUrl("notice"))
 				.andExpect(status().is3xxRedirection());
 	}
 
