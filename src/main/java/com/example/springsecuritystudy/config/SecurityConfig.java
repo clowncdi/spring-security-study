@@ -27,7 +27,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.antMatchers("/", "/home", "/signup", "/example",
 								"/css/**", "/h2-console/**").permitAll()
-						.antMatchers("/post").hasRole("USER")
+						.antMatchers("/note").hasRole("USER")
 						.antMatchers("/admin").hasRole("ADMIN")
 						.antMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
 						.antMatchers(HttpMethod.DELETE, "/notice").hasRole("ADMIN")

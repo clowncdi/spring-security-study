@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy.post;
+package com.example.springsecuritystudy.note;
 
 import java.util.List;
 
@@ -18,30 +18,30 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/post")
-public class PostController {
+@RequestMapping("/note")
+public class NoteController {
 
-	private final PostService postService;
+	private final NoteService noteService;
 
 	@GetMapping
 	public String getPost(Authentication authentication, Model model) {
 		User user = (User) authentication.getPrincipal();
-		List<Post> posts = postService.findByUser(user);
-		model.addAttribute("posts", posts);
-		return "post/index";
+		List<Note> notes = noteService.findByUser(user);
+		model.addAttribute("notes", notes);
+		return "note/index";
 	}
 
 	@PostMapping
-	public String savePost(@ModelAttribute PostDto postDto, Authentication authentication) {
+	public String savePost(@ModelAttribute NoteDto noteDto, Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
-		postService.savePost(user, postDto.getTitle(), postDto.getContent());
- 		return "redirect:post";
+		noteService.saveNote(user, noteDto.getTitle(), noteDto.getContent());
+ 		return "redirect:note";
 	}
 
 	@DeleteMapping
 	public String deletePost(@RequestParam Long id, Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
-		postService.deletePost(user, id);
-		return "redirect:post";
+		noteService.deleteNote(user, id);
+		return "redirect:note";
 	}
 }

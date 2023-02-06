@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy.post;
+package com.example.springsecuritystudy.note;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/admin")
 public class AdminController {
 
-	private final PostService postService;
+	private final NoteService noteService;
 
 	/**
 	 * 어드민인 경우 게시글 조회
@@ -26,8 +26,8 @@ public class AdminController {
 	@GetMapping
 	public String getPostForAdmin(Authentication authentication, Model model) {
 		User user = (User) authentication.getPrincipal();
-		List<Post> posts = postService.findByUser(user);
-		model.addAttribute("posts", posts);
+		List<Note> notes = noteService.findByUser(user);
+		model.addAttribute("notes", notes);
 		return "admin/index";
 	}
 }

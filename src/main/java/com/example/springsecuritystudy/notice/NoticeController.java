@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.springsecuritystudy.post.PostDto;
+import com.example.springsecuritystudy.note.NoteDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,8 +33,8 @@ public class NoticeController {
 	}
 
 	@PostMapping
-	public String savePost(@ModelAttribute PostDto postDto) {
-		noticeService.saveNotice(postDto.getTitle(), postDto.getContent());
+	public String savePost(@ModelAttribute NoteDto noteDto) {
+		noticeService.saveNotice(noteDto.getTitle(), noteDto.getContent());
 		return "redirect:notice";
 	}
 

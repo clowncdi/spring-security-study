@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy.post;
+package com.example.springsecuritystudy.note;
 
 import java.util.List;
 
@@ -14,17 +14,17 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PostService {
+public class NoteService {
 
-	private final PostRepository postRepository;
+	private final NoteRepository noteRepository;
 
 	@Transactional(readOnly = true)
-	public List<Post> findByUser(User user) {
+	public List<Note> findByUser(User user) {
 		userNullCheck(user);
 		if (Boolean.TRUE.equals(user.isAdmin())) {
-			return postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+			return noteRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 		}
-		return postRepository.findByUserOrderByIdDesc(user);
+		return noteRepository.findByUserOrderByIdDesc(user);
 	}
 
 	private static void userNullCheck(User user) {
@@ -33,15 +33,15 @@ public class PostService {
 		}
 	}
 
-	public Post savePost(User user, String title, String content) {
+	public Note saveNote(User user, String title, String content) {
 		userNullCheck(user);
-		return postRepository.save(new Post(title, content, user));
+		return noteRepository.save(new Note(title, content, user));
 	}
 
-	public void deletePost(User user, Long id) {
+	public void deleteNote(User user, Long id) {
 		userNullCheck(user);
-		Post post = postRepository.findByIdAndUser(id, user);
-		postRepository.delete(post);
+		Note note = noteRepository.findByIdAndUser(id, user);
+		noteRepository.delete(note);
 	}
 
 }

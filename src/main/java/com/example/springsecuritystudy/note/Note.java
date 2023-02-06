@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy.post;
+package com.example.springsecuritystudy.note;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseTimeEntity {
+public class Note extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue
@@ -35,7 +35,7 @@ public class Post extends BaseTimeEntity {
 	private User user;
 
 	@Builder
-	public Post(String title, String content, User user) {
+	public Note(String title, String content, User user) {
 		this.title = title;
 		this.content = content;
 		this.user = user;
