@@ -35,6 +35,7 @@ class NoticeControllerTest extends TestConfig {
 	@Test
 	void getNotice_인증없음() throws Exception {
 		mvc.perform(get("/notice"))
+				.andExpect(redirectedUrlPattern("**/login"))
 				.andExpect(status().is3xxRedirection());
 	}
 
@@ -51,7 +52,7 @@ class NoticeControllerTest extends TestConfig {
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 						.param("title", "제목")
 						.param("content", "내용")
-				).andExpect(status().is4xxClientError());
+				).andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -62,7 +63,7 @@ class NoticeControllerTest extends TestConfig {
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 						.param("title", "제목")
 						.param("content", "내용")
-			).andExpect(status().is4xxClientError());
+			).andExpect(status().isForbidden());
 	}
 
 	@Test
@@ -80,26 +81,27 @@ class NoticeControllerTest extends TestConfig {
 	@Test
 	void deleteNotice_인증없음() throws Exception {
 		Notice notice = noticeRepository.save(new Notice("제목", "내용"));
-		mvc.perform(delete("/notice/" + notice.getId()))
-				.andExpect(status().is4xxClientError());
+		mvc.perform(delete("/notice?id=" + notice.getId()))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
 	@WithMockUser(roles = "USER", username = "user", password = "user")
 	void deleteNotice_유저인증있음() throws Exception {
 		Notice notice = noticeRepository.save(new Notice("제목", "내용"));
-		mvc.perform(delete("/notice/" + notice.getId())
+		mvc.perform(delete("/notice?id=" + notice.getId())
 						.with(csrf()))
-				.andExpect(status().is4xxClientError());
+				.andExpect(status().isForbidden());
 	}
 
 	@Test
 	@WithMockAdmin
 	void deleteNotice_어드민인증있음() throws Exception {
 		Notice notice = noticeRepository.save(new Notice("제목", "내용"));
-		mvc.perform(delete("/notice/" + notice.getId())
+		mvc.perform(delete("/notice?id=" + notice.getId())
 						.with(csrf()))
-				.andExpect(status().is4xxClientError());
+				.andExpect(redirectedUrl("notice"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 

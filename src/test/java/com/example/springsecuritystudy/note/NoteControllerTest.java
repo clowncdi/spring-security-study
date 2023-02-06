@@ -52,7 +52,8 @@ class NoteControllerTest extends TestConfig {
 	void getNote_인증없음() throws Exception {
 		mvc.perform(
 				get("/note")
-		).andExpect(status().is3xxRedirection());
+		).andExpect(redirectedUrlPattern("**/login"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 	@Test
@@ -69,7 +70,8 @@ class NoteControllerTest extends TestConfig {
 						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 						.param("title", "제목")
 						.param("content", "내용")
-		).andExpect(status().is3xxRedirection());
+		).andExpect(redirectedUrlPattern("**/login"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 	@Test
@@ -98,7 +100,8 @@ class NoteControllerTest extends TestConfig {
 		Note note = noteRepository.save(new Note("제목", "내용", user));
 		mvc.perform(
 				delete("/note?id=" + note.getId()).with(csrf())
-		).andExpect(status().is3xxRedirection());
+		).andExpect(redirectedUrlPattern("**/login"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 	@Test
@@ -106,7 +109,8 @@ class NoteControllerTest extends TestConfig {
 		Note note = noteRepository.save(new Note("제목", "내용", user));
 		mvc.perform(
 				delete("/note?id=" + note.getId()).with(csrf()).with(user(user))
-		).andExpect(redirectedUrl("note")).andExpect(status().is3xxRedirection());
+		).andExpect(redirectedUrl("note"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 	@Test
@@ -114,7 +118,7 @@ class NoteControllerTest extends TestConfig {
 		Note note = noteRepository.save(new Note("제목", "내용", user));
 		mvc.perform(
 				delete("/note?id=" + note.getId()).with(csrf()).with(user(admin))
-		).andExpect(status().is4xxClientError());
+		).andExpect(status().isForbidden());
 	}
 
 }
