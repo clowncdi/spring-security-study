@@ -16,6 +16,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
+				.httpBasic().disable()
+				.csrf();
+		http
+				.rememberMe();
+		http
 				.authorizeHttpRequests(auth -> auth
 						.antMatchers("/", "/home", "/signup", "/example",
 								"/css/**", "/h2-console/**").permitAll()
