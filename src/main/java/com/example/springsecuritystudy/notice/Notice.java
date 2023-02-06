@@ -8,6 +8,7 @@ import javax.persistence.Lob;
 import com.example.springsecuritystudy.model.BaseTimeEntity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ public class Notice extends BaseTimeEntity {
 	@Lob
 	private String content;
 
+	@Builder
 	public Notice(String title, String content) {
 		this.title = title;
 		this.content = content;

@@ -3,6 +3,7 @@ package com.example.springsecuritystudy.config;
 import javax.annotation.PostConstruct;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import com.example.springsecuritystudy.notice.NoticeService;
 import com.example.springsecuritystudy.post.PostService;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
+@Profile(value = "!test")
 public class InitializeConfig {
 
 	private final UserService userService;

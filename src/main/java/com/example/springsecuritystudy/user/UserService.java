@@ -17,12 +17,22 @@ public class UserService {
 
 	public User signup(String username, String password) {
 		alreadyRegisteredUser(username);
-		return userRepository.save(new User(username, passwordEncoder.encode(password), "ROLE_USER"));
+		User user = User.builder()
+				.username(username)
+				.password(passwordEncoder.encode(password))
+				.authority("ROLE_USER")
+				.build();
+		return userRepository.save(user);
 	}
 
 	public User signupAdmin(String username, String password) {
 		alreadyRegisteredUser(username);
-		return userRepository.save(new User(username, passwordEncoder.encode(password), "ROLE_ADMIN"));
+		User user = User.builder()
+				.username(username)
+				.password(passwordEncoder.encode(password))
+				.authority("ROLE_ADMIN")
+				.build();
+		return userRepository.save(user);
 	}
 
 	public User findByUsername(String username) {

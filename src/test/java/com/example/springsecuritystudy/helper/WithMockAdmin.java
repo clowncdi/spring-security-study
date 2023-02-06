@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy;
+package com.example.springsecuritystudy.helper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

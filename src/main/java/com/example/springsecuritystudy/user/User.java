@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ public class User implements UserDetails {
 	private String password;
 	private String authority;
 
+	@Builder
 	public User(String username, String password, String authority) {
 		this.username = username;
 		this.password = password;

@@ -3,14 +3,13 @@ package com.example.springsecuritystudy.notice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.example.springsecuritystudy.WithMockAdmin;
+import com.example.springsecuritystudy.helper.TestConfig;
+import com.example.springsecuritystudy.helper.WithMockAdmin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -19,9 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@Transactional
-class NoticeControllerTest {
+class NoticeControllerTest extends TestConfig {
 
 	@Autowired
 	private NoticeRepository noticeRepository;

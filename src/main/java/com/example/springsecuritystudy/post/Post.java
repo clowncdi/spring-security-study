@@ -13,6 +13,7 @@ import com.example.springsecuritystudy.model.BaseTimeEntity;
 import com.example.springsecuritystudy.user.User;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +34,7 @@ public class Post extends BaseTimeEntity {
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
+	@Builder
 	public Post(String title, String content, User user) {
 		this.title = title;
 		this.content = content;
