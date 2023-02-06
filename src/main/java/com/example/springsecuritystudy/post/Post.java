@@ -1,8 +1,6 @@
 package com.example.springsecuritystudy.post;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,8 +28,6 @@ public class Post extends BaseTimeEntity {
 	private String title;
 	@Lob
 	private String content;
-	@Enumerated(EnumType.STRING)
-	private PostStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
@@ -40,7 +36,6 @@ public class Post extends BaseTimeEntity {
 	public Post(String title, String content, User user) {
 		this.title = title;
 		this.content = content;
-		this.status = PostStatus.Y;
 		this.user = user;
 	}
 

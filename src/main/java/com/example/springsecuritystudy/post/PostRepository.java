@@ -8,9 +8,8 @@ import com.example.springsecuritystudy.user.User;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-	List<Post> findByUserAndStatusOrderByIdDesc(User user, PostStatus status);
+	List<Post> findByUserOrderByIdDesc(User user);
 
 	Post findByIdAndUser(Long id, User user);
 
-	List<Post> findByStatusOrderByIdDesc(PostStatus status);
 }
