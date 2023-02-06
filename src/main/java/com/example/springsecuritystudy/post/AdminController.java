@@ -19,6 +19,10 @@ public class AdminController {
 
 	private final PostService postService;
 
+	/**
+	 * 어드민인 경우 게시글 조회
+	 * @return admin/index.html
+	 */
 	@GetMapping
 	public String getPostForAdmin(Authentication authentication, Model model) {
 		User user = (User) authentication.getPrincipal();

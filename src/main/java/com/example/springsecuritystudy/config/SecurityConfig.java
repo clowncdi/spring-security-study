@@ -9,6 +9,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Security 설정 Config
+ */
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {

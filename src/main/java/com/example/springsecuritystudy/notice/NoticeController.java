@@ -15,6 +15,9 @@ import com.example.springsecuritystudy.post.PostDto;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 공지사항 서비스 Controller
+ */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/notice")
