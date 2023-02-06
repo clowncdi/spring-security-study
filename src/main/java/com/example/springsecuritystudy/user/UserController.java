@@ -23,7 +23,7 @@ public class UserController {
 		return "signup";
 	}
 
-	@PostMapping
+	@PostMapping("/signup")
 	public String signup(@ModelAttribute UserDto userDto) {
 		userService.signup(userDto.getUsername(), userDto.getPassword());
 		return "redirect:login";
