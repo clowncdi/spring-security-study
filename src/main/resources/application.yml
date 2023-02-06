@@ -4,9 +4,10 @@ server:
     session:
       timeout: 10m # 기본 30분, 최소는 1분
 
+# logging 레벨 설정
 logging:
   level:
-    root: info
-    org.springframework.web: debug
-    sql: error
+    root: INFO
+    sql: ERROR
+#    org.springframework.web: debug
 #    org.springframework.security: debug

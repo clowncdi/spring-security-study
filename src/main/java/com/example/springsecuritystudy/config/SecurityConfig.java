@@ -25,7 +25,7 @@ public class SecurityConfig {
 				.rememberMe();
 		http
 				.authorizeHttpRequests(auth -> auth
-						.antMatchers("/", "/home", "/signup", "/example",
+						.antMatchers("/", "/home", "/signup",
 								"/css/**", "/h2-console/**").permitAll()
 						.antMatchers("/note").hasRole("USER")
 						.antMatchers("/admin").hasRole("ADMIN")

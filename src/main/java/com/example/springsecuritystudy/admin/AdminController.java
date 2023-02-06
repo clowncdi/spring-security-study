@@ -1,4 +1,4 @@
-package com.example.springsecuritystudy.note;
+package com.example.springsecuritystudy.admin;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.springsecuritystudy.note.Note;
+import com.example.springsecuritystudy.note.NoteService;
 import com.example.springsecuritystudy.user.User;
 
 import lombok.RequiredArgsConstructor;
