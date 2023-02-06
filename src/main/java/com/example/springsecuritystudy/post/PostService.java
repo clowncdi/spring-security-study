@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.springsecuritystudy.common.UserNotFoundException;
 import com.example.springsecuritystudy.user.User;
-import com.example.springsecuritystudy.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,18 +15,20 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class PostService {
 
-	private final UserRepository userRepository;
 	private final PostRepository postRepository;
 
 	@Transactional(readOnly = true)
 	public List<Post> findByUser(User user) {
 		userNullCheck(user);
-		return postRepository.findByUserAndStatus(user, PostStatus.Y);
+		if (Boolean.TRUE.equals(user.isAdmin())) {
+			return postRepository.findByStatusOrderByIdDesc(PostStatus.Y);
+		}
+		return postRepository.findByUserAndStatusOrderByIdDesc(user, PostStatus.Y);
 	}
 
 	private static void userNullCheck(User user) {
 		if (user == null) {
-			throw new RuntimeException("유저가 없습니다.");
+			throw new UserNotFoundException();
 		}
 	}
 
