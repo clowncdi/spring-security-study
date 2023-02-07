@@ -1,8 +1,5 @@
 package com.example.springsecuritystudy.config;
 
-import com.example.springsecuritystudy.filter.StopwatchFilter;
-import com.example.springsecuritystudy.filter.TesterAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -11,10 +8,20 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.example.springsecuritystudy.filter.StopwatchFilter;
+import com.example.springsecuritystudy.jwt.JwtAuthenticationFilter;
+import com.example.springsecuritystudy.jwt.JwtAuthorizationFilter;
+import com.example.springsecuritystudy.jwt.JwtProperties;
+import com.example.springsecuritystudy.user.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Security 설정 Config
@@ -22,6 +29,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+	private final UserRepository userRepository;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -36,16 +45,20 @@ public class SecurityConfig {
 				new StopwatchFilter(),
 				WebAsyncManagerIntegrationFilter.class
 		);
-		// tester authentication filter
+		// JWT filter
 		http.addFilterBefore(
-				new TesterAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))),
+				new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))),
 				UsernamePasswordAuthenticationFilter.class
+		).addFilterBefore(
+				new JwtAuthorizationFilter(userRepository),
+				BasicAuthenticationFilter.class
 		);
 		http
 				.httpBasic().disable()
-				.csrf();
+				.csrf().disable();
 		http
-				.rememberMe();
+				.rememberMe().disable()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http
 				.authorizeHttpRequests(auth -> auth
 						.antMatchers("/", "/home", "/signup").permitAll()
@@ -64,7 +77,7 @@ public class SecurityConfig {
 						// .logoutUrl("/logout") // post 방식으로만 동작
 						.logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // get 방식으로도 동작
 						.logoutSuccessUrl("/")
-						.deleteCookies("JSESSIONID")
+						.deleteCookies(JwtProperties.COOKIE_NAME)
 						.invalidateHttpSession(true)
 				);
 
