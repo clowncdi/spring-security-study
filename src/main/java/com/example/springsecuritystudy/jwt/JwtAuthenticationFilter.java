@@ -19,9 +19,12 @@ import com.example.springsecuritystudy.user.User;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+	private final JwtUtils jwtUtils;
+
 	public JwtAuthenticationFilter(
-			AuthenticationManager authenticationManager) {
+			AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
 		super(authenticationManager);
+		this.jwtUtils = jwtUtils;
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		User user = (User)authResult.getPrincipal();
-		String token = JwtUtils.createToken(user);
+		String token = jwtUtils.createToken(user);
 		// 쿠키 생성
 		Cookie cookie = new Cookie(JwtProperties.COOKIE_NAME, token);
 		cookie.setMaxAge(JwtProperties.EXPIRATION_TIME); // 쿠키 만료 시간

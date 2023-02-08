@@ -18,16 +18,17 @@ import com.example.springsecuritystudy.common.UserNotFoundException;
 import com.example.springsecuritystudy.user.User;
 import com.example.springsecuritystudy.user.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * JWT를 이용한 인증
  */
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	private final UserRepository userRepository;
+	private final JwtUtils jwtUtils;
 
-	public JwtAuthorizationFilter(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -55,7 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	}
 
 	private Authentication getUsernamePasswordAuthenticationToken(String token) {
-		String username = JwtUtils.getUsername(token);
+		String username = jwtUtils.getUsername(token);
 		if (username != null) {
 			User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 			return new UsernamePasswordAuthenticationToken(

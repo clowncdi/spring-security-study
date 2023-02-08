@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.security.Keys;
 import javafx.util.Pair;
 
@@ -13,27 +18,39 @@ import javafx.util.Pair;
  * JWT Key를 제공하고 조회한다.
  * Key Rolling을 지원한다.
  */
+@Component
 public class JwtKey {
-	/**
-	 * Kid-Key List 외부로 절대 유출되어서는 안된다.
-	 */
-	private static final Map<String, String> SECRET_KEY_SET = new HashMap<String, String>() {
-		{
-			put("key1", "SpringSecurityJWTPracticeProjectIsSoGoodAndThisProjectIsSoFunSpringSecurityJWTPracticeProjectIsSoGoodAndThisProjectIsSoFun");
-			put("key2", "GoodSpringSecurityNiceSpringSecurityGoodSpringSecurityNiceSpringSecurityGoodSpringSecurityNiceSpringSecurityGoodSpringSecurityNiceSpringSecurity");
-			put("key3", "HelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurity");
-		}
-	};
 
-	private static final String[] KID_SET = SECRET_KEY_SET.keySet().toArray(new String[0]);
-	private static Random randomIndex = new Random();
+	private final Environment env;
+
+	public JwtKey(Environment env) {
+		this.env = env;
+	}
+
+	private Map<String, String> SECRET_KEY_SET;
+	private String[] KID_SET;
+	private Random randomIndex;
+
+
+	@PostConstruct
+	public void init() {
+		SECRET_KEY_SET = new HashMap<String, String>() {
+			{
+				put("key1", env.getProperty("jwt.secret-key1"));
+				put("key2", env.getProperty("jwt.secret-key2"));
+				put("key3", env.getProperty("jwt.secret-key3"));
+			}
+		};
+		KID_SET = SECRET_KEY_SET.keySet().toArray(new String[0]);
+		randomIndex = new Random();
+	}
 
 	/**
 	 * SECRET_KEY_SET 에서 랜덤한 KEY 가져오기
 	 *
 	 * @return kid와 key Pair
 	 */
-	public static Pair<String, Key> getRandomKey() {
+	public Pair<String, Key> getRandomKey() {
 		String kid = KID_SET[randomIndex.nextInt(KID_SET.length)];
 		String secretKey = SECRET_KEY_SET.get(kid);
 		return new Pair<>(kid, Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)));
@@ -45,7 +62,7 @@ public class JwtKey {
 	 * @param kid kid
 	 * @return Key
 	 */
-	public static Key getKey(String kid) {
+	public Key getKey(String kid) {
 		String key = SECRET_KEY_SET.getOrDefault(kid, null);
 		if (key == null) {
 			return null;

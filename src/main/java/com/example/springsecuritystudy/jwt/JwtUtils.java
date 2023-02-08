@@ -3,24 +3,31 @@ package com.example.springsecuritystudy.jwt;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
 import com.example.springsecuritystudy.user.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import javafx.util.Pair;
+import lombok.RequiredArgsConstructor;
 
+@Component
+@RequiredArgsConstructor
 public class JwtUtils {
+	private final JwtKey jwtKey;
+
 	/**
 	 * 토큰에서 username 찾기
 	 *
 	 * @param token 토큰
 	 * @return username
 	 */
-	public static String getUsername(String token) {
+	public String getUsername(String token) {
 		// jwtToken에서 username을 찾는다.
 		return Jwts.parserBuilder()
-				.setSigningKeyResolver(SigningKeyResolver.instance)
+				.setSigningKeyResolver(new SigningKeyResolver(jwtKey))
 				.build()
 				.parseClaimsJws(token)
 				.getBody()
@@ -36,10 +43,10 @@ public class JwtUtils {
 	 * @param user 유저
 	 * @return jwt token
 	 */
-	public static String createToken(User user) {
+	public String createToken(User user) {
 		Claims claims = Jwts.claims().setSubject(user.getUsername());
 		Date now = new Date();
-		Pair<String, Key> key = JwtKey.getRandomKey();
+		Pair<String, Key> key = jwtKey.getRandomKey();
 		return Jwts.builder()
 				.setClaims(claims) // 토큰에 담을 정보 설정
 				.setIssuedAt(now) // 토큰 발행 시간 설정

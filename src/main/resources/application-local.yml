@@ -13,3 +13,10 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
+
+jwt:
+  secret-key1: SpringSecurityJWTPracticeProjectIsSoGoodAndThisProjectIsSoFunSpringSecurityJWTPracticeProjectIsSoGoodAndThisProjectIsSoFun
+  secret-key2: GoodSpringSecurityNiceSpringSecurityGoodSpringSecurityNiceSpringSecurityGoodSpringSecurityNiceSpringSecurityGoodSpringSecurityNiceSpringSecurity
+  secret-key3: HelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurityHelloSpringSecurity
+  expiration-time: 86400 #60 * 60 * 24
+  remember-me-expiration-time: 2592000 #60 * 60 * 24 * 30

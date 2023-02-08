@@ -19,6 +19,7 @@ import com.example.springsecuritystudy.filter.StopwatchFilter;
 import com.example.springsecuritystudy.jwt.JwtAuthenticationFilter;
 import com.example.springsecuritystudy.jwt.JwtAuthorizationFilter;
 import com.example.springsecuritystudy.jwt.JwtProperties;
+import com.example.springsecuritystudy.jwt.JwtUtils;
 import com.example.springsecuritystudy.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final UserRepository userRepository;
+	private final JwtUtils jwtUtils;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -47,10 +49,11 @@ public class SecurityConfig {
 		);
 		// JWT filter
 		http.addFilterBefore(
-				new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))),
+				new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))
+						, jwtUtils),
 				UsernamePasswordAuthenticationFilter.class
 		).addFilterBefore(
-				new JwtAuthorizationFilter(userRepository),
+				new JwtAuthorizationFilter(userRepository, jwtUtils),
 				BasicAuthenticationFilter.class
 		);
 		http
