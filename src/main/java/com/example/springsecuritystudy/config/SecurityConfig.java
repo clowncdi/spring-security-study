@@ -91,9 +91,10 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		// 정적 리소스 spring security 대상에서 제외
 		return (web) -> web.ignoring()
-				.antMatchers("/h2-console/**")
-				.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-				;
+				.requestMatchers(
+						PathRequest.toStaticResources().atCommonLocations(),
+						PathRequest.toH2Console()
+				);
 	}
 
 }
